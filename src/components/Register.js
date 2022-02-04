@@ -1,6 +1,24 @@
+import { useState } from 'react';
+
 import FormWithAuthorization from './UI/FormWithAuthorization';
 
 const Register = () => {
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUserData({
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <FormWithAuthorization
