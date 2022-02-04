@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import FormWithAuthorization from './UI/FormWithAuthorization';
-
 const Register = () => {
   const [userData, setUserData] = useState({
     email: '',
@@ -21,10 +19,14 @@ const Register = () => {
 
   return (
     <>
-      <FormWithAuthorization
-        title="Регистрация"
-        buttonName="Зарегистрироваться"
-      />
+      <div className="auth">
+        <h2 className="auth__title">Регистрация</h2>
+        <form className="auth__form">
+          <input type="email" placeholder="Email" required />
+          <input type="password" min="8" placeholder="Пароль" required />
+          <button type="submit">Зарегистрироваться</button>
+        </form>
+      </div>
       <p className="auth__login-hint">Уже зарегистрированы? Войти</p>
     </>
   );
