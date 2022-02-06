@@ -150,7 +150,7 @@ function App() {
       <div className="page">
         <Header />
         <Switch>
-          <Route exact path="/" exact>
+          <Route exact path="/">
             {loggedIn ? (
               <ProtectedRoute
                 path="/"
