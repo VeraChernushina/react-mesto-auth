@@ -4,21 +4,18 @@ import { Link, withRouter } from 'react-router-dom';
 import * as auth from '../utils/auth';
 
 const Register = (props) => {
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-  });
+  const [registrationData, setRegistrationData] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUserData({
+    setRegistrationData({
       [name]: value,
     });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { email, password } = userData;
+    const { email, password } = registrationData;
     auth.register(email, password).then((res) => {
       if (res.ok) {
         props.history.push('/sign-in');
@@ -36,7 +33,7 @@ const Register = (props) => {
             name="email"
             type="email"
             placeholder="Email"
-            value={userData.email || ''}
+            value={registrationData.email || ''}
             onChange={handleChange}
             required
           />
@@ -46,7 +43,7 @@ const Register = (props) => {
             type="password"
             min="8"
             placeholder="Пароль"
-            value={userData.password || ''}
+            value={registrationData.password || ''}
             onChange={handleChange}
             required
           />
