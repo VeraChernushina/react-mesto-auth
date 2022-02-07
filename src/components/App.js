@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -13,30 +13,33 @@ import PopupWithConfirmation from './PopupWithConfirmation';
 
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 import ProtectedRoute from './ProtectedRoute';
 
 import * as auth from '../utils/auth';
 import api from '../utils/api';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] =
-    React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [removedCardId, setRemovedCardId] = React.useState('');
+  const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
+    useState(false);
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [removedCardId, setRemovedCardId] = useState('');
 
   const history = useHistory();
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, initialCards]) => {
         setCurrentUser(userData);
@@ -50,13 +53,14 @@ function App() {
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
-
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   };
-
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+  };
+  const handleInfoTooltip = () => {
+    setIsInfoTooltipOpen(!isInfoTooltipOpen);
   };
 
   const handleCardClick = (card) => {
@@ -148,6 +152,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsConfirmationPopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
   };
 
@@ -156,9 +161,15 @@ function App() {
     return auth
       .register(data)
       .then((data) => {
+        setIsRegistrationSuccessful(true);
+        handleInfoTooltip();
         history.push('/sign-in');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsRegistrationSuccessful(false);
+        handleInfoTooltip();
+      });
   };
 
   const handleAuthorization = (data) => {
@@ -227,6 +238,11 @@ function App() {
           card={removedCardId}
         />
 
+        <InfoTooltip
+          onClose={closeAllPopups}
+          isOpen={isInfoTooltipOpen}
+          isSuccess={isRegistrationSuccessful}
+        />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
