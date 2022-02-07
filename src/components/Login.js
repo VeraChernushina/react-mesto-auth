@@ -29,7 +29,7 @@ const Login = ({ onLogin }) => {
           name="email"
           id="email"
           autoComplete="email"
-          value={loginData.email}
+          value={loginData.email || ''}
           onChange={handleChange}
           required
         />
@@ -40,7 +40,7 @@ const Login = ({ onLogin }) => {
           id="password"
           placeholder="Пароль"
           autoComplete="password"
-          value={loginData.password}
+          value={loginData.password || ''}
           onChange={handleChange}
           required
         />

@@ -180,13 +180,16 @@ function App() {
         localStorage.setItem('jwt', data.token);
         history.push('/');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        handleInfoTooltip();
+      });
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header loggedIn={isLoggedIn} />
         <Switch>
           <Route path="/sign-in">
             <Login onLogin={handleAuthorization} />
