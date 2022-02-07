@@ -25,6 +25,8 @@ function App() {
   const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
     useState(false);
 
+  const [authorizationEmail, setAuthorizationEmail] = useState('');
+
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -186,10 +188,36 @@ function App() {
       });
   };
 
+  // Проверка токена
+  const tokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      return;
+    }
+    auth
+      .getContent(jwt)
+      .then((data) => {
+        setAuthorizationEmail(data.data.email);
+        setIsLoggedIn(true);
+        history.push('/');
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/');
+    }
+  }, [isLoggedIn]);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header loggedIn={isLoggedIn} />
+        <Header loggedIn={isLoggedIn} userEmail={authorizationEmail} />
         <Switch>
           <Route path="/sign-in">
             <Login onLogin={handleAuthorization} />
