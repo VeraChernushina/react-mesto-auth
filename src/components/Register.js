@@ -1,26 +1,23 @@
 import { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import * as auth from '../utils/auth';
-
-const Register = (props) => {
-  const [registrationData, setRegistrationData] = useState({});
+const Register = ({ onRegister }) => {
+  const [registerData, setRegisterData] = useState({
+    email: '',
+    password: '',
+  });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setRegistrationData({
+    setRegisterData({
+      ...registerData,
       [name]: value,
     });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { email, password } = registrationData;
-    auth.register(email, password).then((res) => {
-      if (res.ok) {
-        props.history.push('/sign-in');
-      }
-    });
+    onRegister(registerData);
   };
 
   return (
@@ -33,7 +30,8 @@ const Register = (props) => {
             name="email"
             type="email"
             placeholder="Email"
-            value={registrationData.email || ''}
+            autoComplete="email"
+            value={registerData.email}
             onChange={handleChange}
             required
           />
@@ -43,7 +41,8 @@ const Register = (props) => {
             type="password"
             min="8"
             placeholder="Пароль"
-            value={registrationData.password || ''}
+            autoComplete="password"
+            value={registerData.password}
             onChange={handleChange}
             required
           />
@@ -57,4 +56,4 @@ const Register = (props) => {
   );
 };
 
-export default withRouter(Register);
+export default Register;

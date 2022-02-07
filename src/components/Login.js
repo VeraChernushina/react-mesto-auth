@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
 
-import * as auth from '../utils/auth';
-
-const Login = (props) => {
+const Login = ({ onLogin }) => {
   const [loginData, setLoginData] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setLoginData({
+      ...loginData,
       [name]: value,
     });
   };
@@ -18,16 +16,7 @@ const Login = (props) => {
     if (!loginData.email || !loginData.password) {
       return;
     }
-    const { email, password } = loginData;
-    auth.authorize(email, password).then((data) => {
-      if (data.token) {
-        setLoginData({
-          email: '',
-          password: '',
-        });
-        props.history.push('/');
-      }
-    });
+    onLogin(loginData);
   };
 
   return (
@@ -37,6 +26,9 @@ const Login = (props) => {
         <input
           type="email"
           placeholder="Email"
+          name="email"
+          id="email"
+          autoComplete="email"
           value={loginData.email}
           onChange={handleChange}
           required
@@ -44,7 +36,10 @@ const Login = (props) => {
         <input
           type="password"
           min="8"
+          name="password"
+          id="password"
           placeholder="Пароль"
+          autoComplete="password"
           value={loginData.password}
           onChange={handleChange}
           required
@@ -55,4 +50,4 @@ const Login = (props) => {
   );
 };
 
-export default withRouter(Login);
+export default Login;

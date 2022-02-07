@@ -1,22 +1,26 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import api from '../utils/api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupWithConfirmation from './PopupWithConfirmation';
+
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 
+import * as auth from '../utils/auth';
+import api from '../utils/api';
+
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -29,6 +33,8 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [removedCardId, setRemovedCardId] = React.useState('');
+
+  const history = useHistory();
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -145,35 +151,50 @@ function App() {
     setSelectedCard({});
   };
 
+  // Регистрация и Авторизация профиля
+  const handleRegistration = (data) => {
+    return auth
+      .register(data)
+      .then((data) => {
+        history.push('/sign-in');
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleAuthorization = (data) => {
+    return auth
+      .authorize(data)
+      .then((data) => {
+        setIsLoggedIn(true);
+        localStorage.setItem('jwt', data.token);
+        history.push('/');
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
         <Switch>
-          <Route exact path="/">
-            {loggedIn ? (
-              <ProtectedRoute
-                path="/"
-                component={Main}
-                loggedIn={loggedIn}
-                onEditAvatar={handleEditAvatarClick}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onCardClick={handleCardClick}
-                cards={cards}
-                onCardLike={handleCardLike}
-                onCardDeleteClick={handleCardDeleteClick}
-              />
-            ) : (
-              <Redirect to="/sign-in" />
-            )}
-          </Route>
           <Route path="/sign-in">
-            <Login />
+            <Login onLogin={handleAuthorization} />
           </Route>
           <Route path="/sign-up">
-            <Register />
+            <Register onRegister={handleRegistration} />
           </Route>
+          <ProtectedRoute
+            path="/"
+            component={Main}
+            loggedIn={isLoggedIn}
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDeleteClick={handleCardDeleteClick}
+          />
         </Switch>
         <Footer />
 
