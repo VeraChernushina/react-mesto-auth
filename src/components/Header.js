@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import logoHeader from '../images/logo-header.svg';
 
-const Header = ({ loggedIn, userEmail }) => {
+const Header = ({ loggedIn, userEmail, onSignOut }) => {
   const location = useLocation();
 
   return (
@@ -26,9 +26,9 @@ const Header = ({ loggedIn, userEmail }) => {
       {loggedIn && (
         <nav className="header__nav">
           <span>{userEmail}</span>
-          <Link className="header__sign-out" to="/sign-in">
+          <div className="header__sign-out" onClick={() => onSignOut()}>
             Выйти
-          </Link>
+          </div>
         </nav>
       )}
     </header>

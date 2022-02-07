@@ -188,6 +188,13 @@ function App() {
       });
   };
 
+  // Выход
+  const handleSignOut = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('jwt');
+    history.push('/sign-in');
+  };
+
   // Проверка токена
   const tokenCheck = () => {
     const jwt = localStorage.getItem('jwt');
@@ -217,7 +224,11 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header loggedIn={isLoggedIn} userEmail={authorizationEmail} />
+        <Header
+          loggedIn={isLoggedIn}
+          userEmail={authorizationEmail}
+          onSignOut={handleSignOut}
+        />
         <Switch>
           <Route path="/sign-in">
             <Login onLogin={handleAuthorization} />
