@@ -1,12 +1,6 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+import { checkResponse } from './utils';
 
-const checkResponse = (response) => {
-  return response.ok
-    ? response.json()
-    : Promise.reject(
-        new Error(`Ошибка ${response.status}: ${response.statusText}`)
-      );
-};
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 const headers = {
   Accept: 'application/json',

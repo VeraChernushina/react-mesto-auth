@@ -43,11 +43,9 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
           value={enteredValues.name || ''}
           onChange={handleChange}
         />
-        {errors.name && (
-          <span id="name-error" className="form__input-error">
-            {errors.name}
-          </span>
-        )}
+        <span id="name-error" className="form__input-error">
+          {errors.name}
+        </span>
         <input
           type="text"
           name="about"
@@ -60,11 +58,9 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
           value={enteredValues.about || ''}
           onChange={handleChange}
         />
-        {errors.about && (
-          <span id="job-error" className="form__input-error">
-            {errors.about}
-          </span>
-        )}
+        <span id="job-error" className="form__input-error">
+          {errors.about}
+        </span>
         <button type="submit" className="form__submit" disabled={!isFormValid}>
           {onLoading ? 'Сохранение...' : 'Сохранить'}
         </button>

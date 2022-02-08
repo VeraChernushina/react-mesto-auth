@@ -1,5 +1,5 @@
 .form__submit {
-  margin: 48px 0 0;
+  margin: 19px 0 0;
   padding: 0;
   max-width: 358px;
   width: 100%;
@@ -15,7 +15,7 @@
   font-size: 18px;
   line-height: 21.78px;
   text-align: center;
-  }
+}
 
 .form__submit:hover {
   opacity: 0.8;
