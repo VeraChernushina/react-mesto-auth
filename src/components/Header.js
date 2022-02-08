@@ -26,9 +26,9 @@ const Header = ({ loggedIn, userEmail, onSignOut }) => {
       {loggedIn && (
         <nav className="header__nav">
           <span>{userEmail}</span>
-          <div className="header__sign-out" onClick={() => onSignOut()}>
+          <button className="header__sign-out" onClick={() => onSignOut()}>
             Выйти
-          </div>
+          </button>
         </nav>
       )}
     </header>

@@ -52,17 +52,17 @@ function App() {
       });
   }, []);
 
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+  const openEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
   };
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+  const openEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
   };
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+  const openAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
   };
-  const handleInfoTooltip = () => {
-    setIsInfoTooltipOpen(!isInfoTooltipOpen);
+  const openInfoTooltip = () => {
+    setIsInfoTooltipOpen(true);
   };
 
   const handleCardClick = (card) => {
@@ -164,13 +164,13 @@ function App() {
       .register(data)
       .then((data) => {
         setIsRegistrationSuccessful(true);
-        handleInfoTooltip();
+        openInfoTooltip();
         history.push('/sign-in');
       })
       .catch((err) => {
         console.log(err);
         setIsRegistrationSuccessful(false);
-        handleInfoTooltip();
+        openInfoTooltip();
       });
   };
 
@@ -180,11 +180,12 @@ function App() {
       .then((data) => {
         setIsLoggedIn(true);
         localStorage.setItem('jwt', data.token);
+        handleTokenCheck();
         history.push('/');
       })
       .catch((err) => {
         console.log(err);
-        handleInfoTooltip();
+        openInfoTooltip();
       });
   };
 
@@ -196,7 +197,7 @@ function App() {
   };
 
   // Проверка токена
-  const tokenCheck = () => {
+  const handleTokenCheck = () => {
     const jwt = localStorage.getItem('jwt');
     if (!jwt) {
       return;
@@ -212,7 +213,7 @@ function App() {
   };
 
   useEffect(() => {
-    tokenCheck();
+    handleTokenCheck();
   }, []);
 
   useEffect(() => {
@@ -240,9 +241,9 @@ function App() {
             path="/"
             component={Main}
             loggedIn={isLoggedIn}
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={openEditAvatarClick}
+            onEditProfile={openEditProfileClick}
+            onAddPlace={openAddPlaceClick}
             onCardClick={handleCardClick}
             cards={cards}
             onCardLike={handleCardLike}

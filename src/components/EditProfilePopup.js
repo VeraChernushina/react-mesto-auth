@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import PopupWithForm from "./PopupWithForm";
-import useForm from "../hooks/useForm";
+import React, { useContext, useEffect } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import PopupWithForm from './PopupWithForm';
+import useForm from '../hooks/useForm';
 
 const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
   const currentUser = useContext(CurrentUserContext);
 
-  const { enteredValues, errors, handleChange, isFormValid, resetForm } = useForm();
+  const { enteredValues, errors, handleChange, isFormValid, resetForm } =
+    useForm();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,8 +19,8 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
   };
 
   useEffect(() => {
-    currentUser ? resetForm(currentUser) : resetForm()
-  }, [ resetForm, isOpen, currentUser ]);
+    currentUser ? resetForm(currentUser) : resetForm();
+  }, [resetForm, isOpen, currentUser]);
 
   return (
     <PopupWithForm
@@ -39,10 +40,14 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
           maxLength="40"
           className="form__input"
           required
-          value={enteredValues.name || ""}
+          value={enteredValues.name || ''}
           onChange={handleChange}
         />
-        {errors.name && <span id="name-error" className="form__input-error">{errors.name}</span>}
+        {errors.name && (
+          <span id="name-error" className="form__input-error">
+            {errors.name}
+          </span>
+        )}
         <input
           type="text"
           name="about"
@@ -52,12 +57,16 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onLoading }) => {
           maxLength="200"
           className="form__input"
           required
-          value={enteredValues.about || ""}
+          value={enteredValues.about || ''}
           onChange={handleChange}
         />
-        {errors.about && <span id="job-error" className="form__input-error">{errors.about}</span>}
+        {errors.about && (
+          <span id="job-error" className="form__input-error">
+            {errors.about}
+          </span>
+        )}
         <button type="submit" className="form__submit" disabled={!isFormValid}>
-          {onLoading ? "Сохранение..." : "Сохранить"}
+          {onLoading ? 'Сохранение...' : 'Сохранить'}
         </button>
       </fieldset>
     </PopupWithForm>
